@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <home-view />
   </div>
 </template>
+
+<script>
+  import HomeView from '@/views/HomeView.vue'
+  export default {
+    components: {
+      HomeView
+    }
+  }
+</script>
 
 <style>
 #app {
@@ -15,9 +20,20 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  /* display: flex; */
+  /* display: flex */
 }
 
-nav {
+html {
+  height: 100%
+}
+
+* {
+  padding: 0;
+  margin: 0
+}
+
+/* nav {
   padding: 30px;
 }
 
@@ -28,5 +44,5 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>

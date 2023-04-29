@@ -1,0 +1,61 @@
+@keyframes slide-in {
+    from { transform: translateY(10px) translateX(0px); opacity: 0}
+    to { transform: translateY(0px) translateX(0px); opacity: 1}
+}
+
+@keyframes slide-out {
+    from { transform: translateY(0px); opacity: 1;}
+    to { transform: translateY(0px) translateX(0px); opacity: 0;}
+}
+
+.slide-enter-active {
+    animation: slide-in .2s ease;
+}
+
+.slide-leave-active {
+    animation: slide-out .2s ease;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+@keyframes mySlide-in {
+    0% { transform: translateY(10px) translateX(0px); opacity: 0; overflow: auto;}
+    100% { transform: translateY(0px) translateX(0px); opacity: 1; overflow: hidden}
+}
+
+@keyframes mySlide-out {
+    0% { transform: translateY(0px); opacity: 1; overflow: auto}
+    100% { transform: translateY(0px) translateX(0px); opacity: 0; overflow: hidden}
+}
+
+.mySlide-enter-active {
+    animation: slide-in .2s ease;
+}
+
+.mySlide-leave-active {
+    animation: slide-out .2s ease;
+}
+
+@keyframes loading-in {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+}
+
+@keyframes loading-out {
+    100% { opacity: 1 }
+    0% { opacity: 0 }
+}
+
+.loading-enter-active {
+    animation: loading-in .5s
+}
+
+/* .loading-leave-active {
+    animation: loading-out .2s
+} */
