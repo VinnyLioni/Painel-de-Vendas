@@ -40,11 +40,11 @@
               <span>Vendas   </span>
               <i class="fas fa-cash-register"></i>
             </li>
-            <li>
+            <li @click='goToLink("/finances")'>
               <span>Financeiro   </span>
               <i class="fas fa-coins"></i>
             </li>
-            <li>
+            <li @click='goToLink("/reports")'>
               <span>Relatórios   </span>
               <i class="fas fa-book"></i>
             </li>

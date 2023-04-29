@@ -1,6 +1,6 @@
 <template>
-  <div class="itens-page">
-    <content-page :title="title" :icon="iconName">
+  <div class="finances-page">
+    <content-page :title="title">
         <template v-slot:content>
             <options-content :optiontitle="optiontitle1"></options-content>
             <options-content :optiontitle="optiontitle2"></options-content>
@@ -14,18 +14,16 @@
 <script>
 import contentPage from '@/components/contentPage.vue'
 import optionsContent from '@/components/optionsContent.vue'
-
 export default {
-    name: 'itensPage',
+    name: 'financesPage',
     components: { contentPage, optionsContent },
     data(){
         return {
-            title: 'Menu de Produtos',
-            iconName: 'fas fa-box-archive',
-            optiontitle1: 'Cadastro de Produtos',
-            optiontitle2: 'Grupo de Produtos',
-            optiontitle3: 'Materiais de Produtos',
-            optiontitle4: 'Cadastro de Embalagens'
+            title: 'Menu Financeiro',
+            optiontitle1: 'Títulos a Receber',
+            optiontitle2: 'Títulos a Pagar',
+            optiontitle3: 'Baixa de Títulos a Receber',
+            optiontitle4: 'Baixa de Títulos a Pagar',
         }
     }
 }

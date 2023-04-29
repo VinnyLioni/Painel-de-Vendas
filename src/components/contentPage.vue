@@ -5,8 +5,10 @@
         <i :class="['fas', icon]"></i>
     </div>
     <hr>
-    <div class="options-content">
-        <slot name="content"></slot>
+    <div class="scrollable-content">
+        <div class="options-content">
+            <slot name="content"></slot>
+        </div>
     </div>
   </div>
 </template>
@@ -51,6 +53,12 @@ export default {
         flex-direction: row;
         font-size: 1.5em;
     }
+
+    .scrollable-content {
+        overflow-y: scroll;
+        
+        }
+        
 
 
 </style>

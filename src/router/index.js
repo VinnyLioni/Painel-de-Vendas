@@ -5,6 +5,8 @@ import HomeView from '../views/HomeView.vue'
 import usersPage from '../content/usersPage.vue'
 import itensPage from '../content/itensPage.vue'
 import shopPage from '../content/shopPage.vue'
+import financesPage from '../content/financesPage.vue'
+import reportsPage from '../content/reportsPage'
 
 Vue.use(VueRouter)
 
@@ -32,6 +34,16 @@ const routes = [
     path: '/shop',
     name: 'shop',
     component: shopPage
+  },
+  {
+    path: '/finances',
+    name: 'finances',
+    component: financesPage
+  },
+  {
+    path: '/reports',
+    name: 'reports',
+    component: reportsPage
   }
 ]
 

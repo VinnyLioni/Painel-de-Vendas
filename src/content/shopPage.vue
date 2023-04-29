@@ -1,8 +1,10 @@
 <template>
   <div class="shop-page">
-    <content-page>
+    <content-page :title="title" :icon="iconName">
         <template v-slot:content>
-            <options-content></options-content>
+            <options-content :optiontitle="optiontitle1"></options-content>
+            <options-content :optiontitle="optiontitle2"></options-content>
+            <options-content :optiontitle="optiontitle3"></options-content>
         </template>
     </content-page>
   </div>
@@ -17,7 +19,11 @@ export default {
     components: { contentPage, optionsContent},
     data(){
         return {
-            title: 'Menu de Vendas'
+            title: 'Menu de Vendas',
+            iconName: 'fas fa-cash-register',
+            optiontitle1: 'Pedido de Venda',
+            optiontitle2: 'Canal de Venda',
+            optiontitle3: 'Cadastro de Clientes',
         }
     }
 
