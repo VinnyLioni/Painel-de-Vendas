@@ -1,16 +1,16 @@
 <template>
-  <div class="content-page">
-    <div class="header-content">
-        <span>{{ title }}</span>
-        <i :class="['fas', icon]"></i>
-    </div>
-    <hr>
-    <div class="scrollable-content">
-        <div class="options-content">
-            <slot name="content"></slot>
+    <div class="content-page">
+        <div class="header-content">
+            <span>{{ title }}</span>
+            <i :class="['fas', icon]"></i>
+        </div>
+        <hr>
+        <div class="scrollable-content">
+            <div class="options-content">
+                <slot name="content"></slot>
+            </div>
         </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -27,6 +27,8 @@ export default {
             default: ''
         }
 
+    },
+    methods: {
     }
 }
 </script>
@@ -55,10 +57,26 @@ export default {
     }
 
     .scrollable-content {
-        overflow-y: scroll;
-        
+        overflow-y: auto;
         }
         
+    @keyframes slide-in {
+    from { transform: translateY(10px) translateX(0px); opacity: 0}
+    to { transform: translateY(0px) translateX(0px); opacity: 1}
+}
+
+@keyframes slide-out {
+    from { transform: translateY(0px); opacity: 1;}
+    to { transform: translateY(0px) translateX(0px); opacity: 0;}
+}
+
+.slide-enter-active {
+    animation: slide-in .2s ease;
+}
+
+.slide-leave-active {
+    animation: slide-out .2s ease;
+}
 
 
 </style>

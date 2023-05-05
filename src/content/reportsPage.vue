@@ -1,6 +1,6 @@
 <template>
   <div class="reports-page">
-    <content-page>
+    <content-page :title="title" :icon="iconName">
         <template v-slot:content>
             <options-content :optiontitle="optiontitle1"></options-content>
             <options-content :optiontitle="optiontitle2"></options-content>
@@ -25,6 +25,7 @@ export default {
     data(){
         return {
             title: 'Menu de Relatorios',
+            iconName: 'fas fa-book',
             optiontitle1: 'Consulta de Produtos',
             optiontitle2: 'Consulta de Embalagens',
             optiontitle3: 'Consulta de Bancos',

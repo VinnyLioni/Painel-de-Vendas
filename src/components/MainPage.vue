@@ -1,8 +1,9 @@
 <template>
+  <transition name="slide">
   <div class="main-page">
     <header>
       <div class="header">
-        <button class="menu-button">
+        <button class="menu-button" @click='navigateTo("/")'>
           Menu Principal
           <i class="fas fa-bars"></i>
         </button>
@@ -28,23 +29,23 @@
           </div>
           <hr>
           <ul class="menu-content">
-            <li @click='goToLink("/users")'>
+            <li @click='navigateTo("/users")'>
               <span>Usuarios   </span>
               <i class="fas fa-user"></i>
             </li>
-            <li @click='goToLink("/itens")'>
+            <li @click='navigateTo("/itens")'>
               <span>Produtos   </span>
               <i class="fas fa-box-archive"></i>
             </li>
-            <li @click='goToLink("/shop")'>
+            <li @click='navigateTo("/shop")'>
               <span>Vendas   </span>
               <i class="fas fa-cash-register"></i>
             </li>
-            <li @click='goToLink("/finances")'>
+            <li @click='navigateTo("/finances")'>
               <span>Financeiro   </span>
               <i class="fas fa-coins"></i>
             </li>
-            <li @click='goToLink("/reports")'>
+            <li @click='navigateTo("/reports")'>
               <span>Relatórios   </span>
               <i class="fas fa-book"></i>
             </li>
@@ -58,27 +59,34 @@
     <div class="content-area">
       <body>
         <div class="content">
-          <router-view/>
+            <router-view/>
         </div>
       </body>
     </div>
     </div>
   </div>
+  </transition>
 </template>
 
 <script>
+import { goToLink } from '@/utils/utils.js'
+
 export default {
   name: 'MainPage',
   methods: {
-    goToLink(link){
-      const currentPath = this.$route.path;
+    // goToLink(link){
+    //   const currentPath = this.$route.path;
 
-      if (currentPath !== link) {
-        this.$router.push({
-          path: link
-        })
-      }
-    },
+    //   if (currentPath !== link) {
+    //     this.$router.push({
+    //       path: link
+    //     })
+    //   }
+    // },
+    navigateTo(link){
+      goToLink(link, this)
+    }
+    ,
     goBack(){
       const history = this.$router.history; 
 
@@ -93,6 +101,10 @@ export default {
 </script>
 
 <style>
+
+  /* html, body { 
+    display: flex;
+  } */
 
   .main-page {
     display: flex;
@@ -160,7 +172,7 @@ export default {
   aside {
     background-color: #31446e;
     width: 15em;
-    height: 55em;
+    height: 55.4em;
   }
 
   .side-menu {
@@ -239,7 +251,23 @@ export default {
     background-color: rgb(108, 130, 171); 
   }
 
+  @keyframes slide-in {
+    from { transform: translateY(10px) translateX(0px); opacity: 0}
+    to { transform: translateY(0px) translateX(0px); opacity: 1}
+}
 
+@keyframes slide-out {
+    from { transform: translateY(0px); opacity: 1;}
+    to { transform: translateY(0px) translateX(0px); opacity: 0;}
+}
+
+.slide-enter-active {
+    animation: slide-in .2s ease;
+}
+
+.slide-leave-active {
+    animation: slide-out .2s ease;
+}
 
   /* footer {
     background-color: rgb(55, 91, 139);

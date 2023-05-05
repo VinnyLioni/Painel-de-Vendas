@@ -2,7 +2,7 @@
     <div class="users-page">
         <content-page :title="title" :icon="iconName">
             <template v-slot:content>
-                <options-content :optiontitle="optiontitle1"></options-content>
+                <options-content :optiontitle="optiontitle1" @goTo='navigateTo("/user_register")'></options-content>
                 <options-content :optiontitle="optiontitle2"></options-content>
                 <options-content :optiontitle="optiontitle3"></options-content>
             </template>
@@ -13,6 +13,7 @@
 <script>
 import contentPage from '@/components/contentPage.vue'
 import optionsContent from '@/components/optionsContent.vue'
+import { goToLink } from '@/utils/utils.js'
 
 export default {
     name: 'usersPage',
@@ -24,6 +25,11 @@ export default {
             optiontitle1: 'Cadastro de Usuários',
             optiontitle2: 'Grupo de Usuários',
             optiontitle3: 'Nível de Usuários',
+        }
+    },
+    methods: {
+        navigateTo(link){
+            goToLink(link, this)
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="finances-page">
-    <content-page :title="title">
+    <content-page :title="title" :icon="iconName">
         <template v-slot:content>
             <options-content :optiontitle="optiontitle1"></options-content>
             <options-content :optiontitle="optiontitle2"></options-content>
@@ -20,6 +20,7 @@ export default {
     data(){
         return {
             title: 'Menu Financeiro',
+            iconName: "fas fa-coins",
             optiontitle1: 'Títulos a Receber',
             optiontitle2: 'Títulos a Pagar',
             optiontitle3: 'Baixa de Títulos a Receber',

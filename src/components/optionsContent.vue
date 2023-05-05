@@ -1,5 +1,5 @@
 <template>
-  <div class="options-content">
+  <div class="options-content" @click='setGoTo()'>
     <div class="option-row">
         <span>{{ optiontitle }}</span>
     </div>
@@ -13,6 +13,11 @@ export default {
         optiontitle: {
             type: String,
             required: true
+        }
+    },
+    methods: {
+        setGoTo(){
+            this.$emit('goTo')
         }
     }
 }

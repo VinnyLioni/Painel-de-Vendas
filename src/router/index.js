@@ -7,6 +7,7 @@ import itensPage from '../content/itensPage.vue'
 import shopPage from '../content/shopPage.vue'
 import financesPage from '../content/financesPage.vue'
 import reportsPage from '../content/reportsPage'
+import userRegister from '../content/userRegister'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes = [
     path: '/reports',
     name: 'reports',
     component: reportsPage
+  },
+  {
+    path: '/user_register',
+    name: 'user register',
+    component: userRegister
   }
 ]
 
