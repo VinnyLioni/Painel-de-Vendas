@@ -1,5 +1,5 @@
 <template>
-  <div class="options-content" @click='setGoTo()'>
+  <div class="options-contentvue" @click='setGoTo()'>
     <div class="option-row">
         <span>{{ optiontitle }}</span>
     </div>
@@ -24,9 +24,10 @@ export default {
 </script>
 
 <style>
-    .options-content {
+    .options-contentvue {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         font-size: 1.3em;
     }
 

@@ -4,10 +4,16 @@
             <span>{{ title }}</span>
             <i :class="['fas', icon]"></i>
         </div>
+        <div class="button-content">
+            <slot name="buttons"></slot>
+        </div>
         <hr>
         <div class="scrollable-content">
             <div class="options-content">
                 <slot name="content"></slot>
+            </div>
+            <div class="options-table-area">
+                <slot name="table"></slot>
             </div>
         </div>
     </div>
@@ -50,10 +56,20 @@ export default {
         gap: 10px;
     }
 
+    .button-content {
+        display: flex;
+        padding-left: 10px;
+    }
+
     .options-content {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         font-size: 1.5em;
+    }
+
+    .options-table-content {
+        display: flex;
+        ;
     }
 
     .scrollable-content {

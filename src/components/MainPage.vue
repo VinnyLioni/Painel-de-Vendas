@@ -234,6 +234,7 @@ export default {
     justify-content: space-between;
     margin-top: 2px;
     border-radius: 10px;
+    transition: .2s;
   }
 
   .menu-content li:hover {
@@ -242,7 +243,7 @@ export default {
     border-radius: 10px;
     transition: .2s;
     cursor: pointer;
-    transform: translateY(-5px);
+    transform: scale(1.1) translateY(-5px);
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
   }
   
