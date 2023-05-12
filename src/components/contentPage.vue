@@ -1,8 +1,14 @@
 <template>
     <div class="content-page">
         <div class="header-content">
-            <span>{{ title }}</span>
-            <i :class="['fas', icon]"></i>
+            <div class="page-name">
+                <span>{{ title }}</span>
+                <i :class="['fas', icon]"></i>
+            </div>
+            <button class="back-button" @click="goBack()">
+                <span>Voltar</span>
+                <i class="fas fa-door-open"></i>
+            </button>
         </div>
         <div class="button-content">
             <slot name="buttons"></slot>
@@ -16,6 +22,7 @@
                 <slot name="table"></slot>
             </div>
         </div>
+        <div class="end-of-page">end</div>
     </div>
 </template>
 
@@ -35,6 +42,9 @@ export default {
 
     },
     methods: {
+        goBack(){
+            this.$router.go(-1)
+        }
     }
 }
 </script>
@@ -49,11 +59,55 @@ export default {
         border-radius: 10px;
     } 
 
+    .end-of-page {
+        color: #cedeff;
+    }
+
     .header-content {
         display: flex;
         padding: 30px;
-        font-size: 2em;
+        justify-content: space-between;
+        /* font-size: 2em;
+        gap: 10px; */
+    }
+
+    .page-name {
+        display: flex;
+        /* padding: 30px; */
+        /* font-size: 2em; */
         gap: 10px;
+    }
+
+    .back-button {
+        display: flex;
+        gap: 8px;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 0.5em;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        background-color: #cedeff;
+        color: #31446e;
+        transition: .2s;
+    }
+
+    .back-button .fas.fa-door-open {
+        display: none;
+    }
+
+    .back-button:hover {
+        background-color: #bb3737;
+        color: #fff;
+        transition: .2s;
+    }
+
+    .back-button:hover .fas.fa-door-closed {
+        display: none;
+    }
+
+    .back-button:hover .fas.fa-door-open {
+        display: inline-block;
     }
 
     .button-content {

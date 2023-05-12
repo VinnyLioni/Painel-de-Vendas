@@ -41,6 +41,65 @@
           </div>
         </div>
       </div>
+      <div class="user-table" slot="table">
+        <!-- <div class="options-table">
+          <table>
+            <thead class="table-header">
+              <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Situação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              <tr>
+                <td>1</td>
+                <td>Teste</td>
+                <td>Teste@gmail.com</td>
+                <td>Ativo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> -->
+        <table-page :headers="tableHeaders" :rows="tableRows" :columns="tableColumns"></table-page>
+      </div>
     </content-page>
   </div>
 </template>
@@ -48,14 +107,27 @@
 <script>
 import { goToLink } from '@/utils/utils'
 import contentPage from '@/components/contentPage.vue'
+import tablePage from '@/components/tablePage.vue'
 
 export default {
     name: 'userRegister',
-    components: { contentPage },
+    components: { contentPage, tablePage },
     data(){
       return {
         title: 'Cadastro de Usuários',
-        iconName: 'fas fa-user-gear'
+        iconName: 'fas fa-user-gear',
+        tableHeaders: [ 'Código','Nome','E-mail','Situação'],
+        tableRows: [
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
+        ],
+        tableColumns: [ 'id','nome','email','situacao']
       }
     },
     methods: {
