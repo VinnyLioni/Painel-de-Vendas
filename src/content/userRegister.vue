@@ -3,39 +3,52 @@
     <content-page :title="title" :icon="iconName">
       <div class="button-content" slot="buttons">
         <div class="button-area">
-          <button class="add-user">Cadastrar</button>
+          <button class="add-user" @click="addUser()">Cadastrar</button>
           <button class="edit-user">Editar</button>
           <button class="erase-user">Excluir</button>
         </div>
       </div>
-      <div class="user-content" slot="content">
+      <div class="user-content" slot="content" v-if="mode === 'save'" :class="{ 'slide-down': showContent}">
         <div class="user-box">
           <div class="input-area">
             <div class="first-line">
               <div class="user-name">
                 <span>Nome do Usuário</span>
-                <input type="text">
+                <input type="text" v-model="userName">
               </div>
               <div class="user-email">
                 <span>E-mail do Usuário</span>
-                <input type="text">
+                <input type="text" v-model="userMail">
+              </div> 
+              <div class="user-cpfcnpj">
+                <span>CNPJ/CPF</span>
+                <input type="text" v-model="userCnpjcpf">
               </div>
             </div>
             <div class="second-line">
+            </div>
+            <div class="third-line">
               <div class="user-password">
                 <span>Senha do Usuário</span>
-                <input type="text">
+                <input type="text" v-model="userPassword">
               </div>
               <div class="user-confirmPassword">
                 <span>Confirme a Senha</span>
-                <input type="text">
+                <input type="text" v-model="confirmPassword">
+              </div>
+              <div class="user-situation">
+                <span>Situação</span>
+                <select class="custom-select" v-model="userSituation">
+                  <option value="A">Ativo</option>
+                  <option value="A">Inativo</option>
+                </select>
               </div>
             </div>
-            <div class="third-line">
+            <div class="fourth-line">
               <div class="finish-session">
-                <button class="save-button">Salvar</button>
+                <button class="save-button" @click="saveUser">Salvar</button>
                 <button class="erase-button">Excluir</button>
-                <button class="cancel-button">Cancelar</button>
+                <button class="cancel-button" @click="cancelAddUser">Cancelar</button>
               </div>
             </div>
           </div>
@@ -118,22 +131,69 @@ export default {
         iconName: 'fas fa-user-gear',
         tableHeaders: [ 'Código','Nome','E-mail','Situação'],
         tableRows: [
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
-          { id: 1,  nome: 'Teste', email: 'teste@gmail.com', situacao: 'Ativo'},
         ],
-        tableColumns: [ 'id','nome','email','situacao']
+        tableColumns: [ 'id','nome','email','situacao'],
+        mode: '',
+        showContent: false,
+        userName: '',
+        userMail: '',
+        userPassword: '',
+        confirmPassword: '',
+        userCnpjcpf: '',
+        userSituation: '',
       }
     },
     methods: {
         navigateTo(link){
             goToLink(link, this)
+        },
+        addUser(mode='save'){
+          this.mode=mode
+        },
+        cancelAddUser(mode=''){
+          this.mode=mode
+          this.showContent=false
+        },
+         saveUser() {
+          const userData={
+            nome: this.userName,
+            email: this.userMail,
+            senha: this.userPassword,
+            confirmSenha: this.confirmPassword,
+            cnpjcpf: this.userCnpjcpf,
+            situacao: this.userSituation
+          }
+
+          this.$http
+            .post('/asusu.json', userData)
+            .then(() => {
+              this.userName=''
+              this.userMail=''
+              this.userPassword=''
+              this.confirmPassword=''
+              this.userCnpjcpf=''
+              this.userSituation=''
+            })
+            .catch((error) => {
+              console.log('Erro ao salvar o Usuario:', error)
+            })
+        },
+        getUsersData(){
+          this.$http.get('/asusu.json')
+          .then(response => {
+            const userData=response.data
+            this.tableRows=Object.keys(userData).map(key => ({
+              id: key,
+              ...userData[key]
+            }))
+          })
+          .catch(error => {
+            console.log('Erro ao puxar os dados:', error)
+          })
         }
+    },
+    created(){
+      this.getUsersData()
     }
 }
 </script>
@@ -142,6 +202,10 @@ export default {
   .button-area {
     display: flex;
     gap: 10px;
+  }
+
+  .slide-down {
+    transition: transform 0.5s;
   }
 
   .add-user, .edit-user, .erase-user {
@@ -205,7 +269,7 @@ export default {
     justify-content: space-evenly;
   }
 
-  .input-area input {
+  .input-area input  {
     border-radius: 10px;
     padding: 10px;
     border: none;
@@ -214,11 +278,23 @@ export default {
     background-color: #cedeff;
   }
 
-  .first-line, .second-line {
+  .custom-select {
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 200px;
+    height: 35px;
+    border: none;
+    outline: none;
+    background-color: #cedeff;
+    cursor: pointer;
+  }
+
+  .first-line, .second-line, .third-line {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 100px;
+    gap: 50px;
   }
 
   .first-line {
@@ -230,6 +306,10 @@ export default {
   }
 
   .third-line {
+    padding-top: 50px;
+  }
+
+  .fourth-line {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -276,7 +356,7 @@ export default {
     color: #fff;
   }
 
-  .user-name, .user-email, .user-password, .user-confirmPassword {
+  .user-name, .user-email, .user-password, .user-confirmPassword, .user-situation, .user-cpfcnpj{
     display: flex;
     flex-direction: column;
     align-content: center;

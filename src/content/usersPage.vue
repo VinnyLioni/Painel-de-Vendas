@@ -15,7 +15,7 @@ import contentPage from '@/components/contentPage.vue'
 import optionsContent from '@/components/optionsContent.vue'
 import { goToLink } from '@/utils/utils.js'
 
-export default {
+ export default {
     name: 'usersPage',
     components: { contentPage, optionsContent },
     data(){

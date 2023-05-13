@@ -1,14 +1,16 @@
 <template>
   <div id="app">
-    <home-view />
+      <home-view />
   </div>
 </template>
 
 <script>
   import HomeView from '@/views/HomeView.vue'
+  // import transitionComp from '@/components/transitionComp.vue'
+
   export default {
     components: {
-      HomeView
+      HomeView,
     }
   }
 </script>
