@@ -30,6 +30,7 @@ import { goToLink } from '@/utils/utils.js'
     methods: {
         navigateTo(link){
             goToLink(link, this)
+            console.log(link)
         }
     }
 }

@@ -72,6 +72,7 @@ export default {
 
     .side-menu {
         padding-top: 30px;
+        height: 53.6em;
     }
 
     .user-picture {

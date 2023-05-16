@@ -7,7 +7,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in rows" :key="row.id">
+                <tr v-for="row in rows" :key="row.id" @click="clickRow()">
                     <td v-for="column in columns" :key="column">{{ row[column]}}</td>
                 </tr>
             </tbody>
@@ -30,7 +30,12 @@ export default {
         columns: { 
             type: Array,
             required: true
-        }
+        },
+    },
+    methods: {
+      clickRow(){
+        this.$emit('selectRow')
+      }
     }
 }
 </script>
@@ -90,5 +95,8 @@ export default {
     border-bottom-right-radius: 10px;
   }
 
+  tr.selected {
+    background-color: #d3d3d3;
+  }
 
 </style>

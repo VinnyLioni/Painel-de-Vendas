@@ -14,15 +14,15 @@
             <div class="first-line">
               <div class="user-name">
                 <span>Nome do Usuário</span>
-                <input type="text" v-model="userName">
+                <input type="text" v-model="user.name">
               </div>
               <div class="user-email">
                 <span>E-mail do Usuário</span>
-                <input type="text" v-model="userMail">
+                <input type="text" v-model="user.email">
               </div> 
               <div class="user-cpfcnpj">
                 <span>CNPJ/CPF</span>
-                <input type="text" v-model="userCnpjcpf">
+                <input type="text" v-model="user.cnpjcpf" @input="formatCnpjcpf">
               </div>
             </div>
             <div class="second-line">
@@ -30,17 +30,17 @@
             <div class="third-line">
               <div class="user-password">
                 <span>Senha do Usuário</span>
-                <input type="text" v-model="userPassword">
+                <input type="text" v-model="user.password">
               </div>
               <div class="user-confirmPassword">
                 <span>Confirme a Senha</span>
-                <input type="text" v-model="confirmPassword">
+                <input type="text" v-model="user.confirmPassword">
               </div>
               <div class="user-situation">
                 <span>Situação</span>
-                <select class="custom-select" v-model="userSituation">
+                <select class="custom-select" v-model="user.situation">
                   <option value="A">Ativo</option>
-                  <option value="A">Inativo</option>
+                  <option value="I">Inativo</option>
                 </select>
               </div>
             </div>
@@ -55,63 +55,7 @@
         </div>
       </div>
       <div class="user-table" slot="table">
-        <!-- <div class="options-table">
-          <table>
-            <thead class="table-header">
-              <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>E-mail</th>
-                <th>Situação</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              <tr>
-                <td>1</td>
-                <td>Teste</td>
-                <td>Teste@gmail.com</td>
-                <td>Ativo</td>
-              </tr>
-            </tbody>
-          </table>
-        </div> -->
-        <table-page :headers="tableHeaders" :rows="tableRows" :columns="tableColumns"></table-page>
+        <table-page :headers="tableHeaders" :rows="tableRows" :columns="tableColumns" @selectUser="selectUser()"></table-page>
       </div>
     </content-page>
   </div>
@@ -135,15 +79,33 @@ export default {
         tableColumns: [ 'id','nome','email','situacao'],
         mode: '',
         showContent: false,
-        userName: '',
-        userMail: '',
-        userPassword: '',
-        confirmPassword: '',
-        userCnpjcpf: '',
-        userSituation: '',
+        users: {},
+        user: {
+          id: '',
+          nome: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          situacao: '',
+          cnpjcpf: '',
+          selected: false
+        },
+        selectedUser: null, 
       }
     },
     methods: {
+        fetchUsers(){
+          this.$http.get('/asusu.json')
+            .then(response =>{
+              const users = Object.values(response.data || {})
+              this.tableRows = users
+              console.log(users)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        },
+
         navigateTo(link){
             goToLink(link, this)
         },
@@ -154,46 +116,20 @@ export default {
           this.mode=mode
           this.showContent=false
         },
-         saveUser() {
-          const userData={
-            nome: this.userName,
-            email: this.userMail,
-            senha: this.userPassword,
-            confirmSenha: this.confirmPassword,
-            cnpjcpf: this.userCnpjcpf,
-            situacao: this.userSituation
+        formatCnpjcpf(){
+          this.userCnpjcpf = this.userCnpjcpf.replace(/\D/g, '')
+
+          if (this.userCnpjcpf.length <= 11) {
+            this.userCnpjcpf = this.userCnpjcpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Máscara para CPF
+          } else {
+            this.userCnpjcpf = this.userCnpjcpf.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5'); // Máscara para CNPJ
           }
 
-          this.$http
-            .post('/asusu.json', userData)
-            .then(() => {
-              this.userName=''
-              this.userMail=''
-              this.userPassword=''
-              this.confirmPassword=''
-              this.userCnpjcpf=''
-              this.userSituation=''
-            })
-            .catch((error) => {
-              console.log('Erro ao salvar o Usuario:', error)
-            })
-        },
-        getUsersData(){
-          this.$http.get('/asusu.json')
-          .then(response => {
-            const userData=response.data
-            this.tableRows=Object.keys(userData).map(key => ({
-              id: key,
-              ...userData[key]
-            }))
-          })
-          .catch(error => {
-            console.log('Erro ao puxar os dados:', error)
-          })
+          this.userCnpjcpf = this.userCnpjcpf.substring(0, 14)
         }
     },
-    created(){
-      this.getUsersData()
+    mounted(){
+      this.fetchUsers()
     }
 }
 </script>
@@ -360,6 +296,10 @@ export default {
     display: flex;
     flex-direction: column;
     align-content: center;
+  }
+
+  tr.selected {
+    background-color: #a7a7a7;
   }
 
 </style>

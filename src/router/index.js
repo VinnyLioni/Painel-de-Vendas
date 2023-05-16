@@ -8,6 +8,7 @@ import shopPage from '../content/shopPage.vue'
 import financesPage from '../content/financesPage.vue'
 import reportsPage from '../content/reportsPage'
 import userRegister from '../content/userRegister'
+import productsRegister from '@/content/productsRegister'
 
 Vue.use(VueRouter)
 
@@ -50,6 +51,11 @@ const routes = [
     path: '/user_register',
     name: 'user register',
     component: userRegister
+  },
+  { 
+    path: '/products_register',
+    name: 'procuts register',
+    component: productsRegister
   }
 ]
 
