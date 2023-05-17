@@ -46,7 +46,7 @@
             </div>
             <div class="fourth-line">
               <div class="finish-session">
-                <button class="save-button" @click="saveUser">Salvar</button>
+                <button class="save-button">Salvar</button>
                 <button class="erase-button">Excluir</button>
                 <button class="cancel-button" @click="cancelAddUser">Cancelar</button>
               </div>
