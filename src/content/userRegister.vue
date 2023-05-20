@@ -1,88 +1,105 @@
 <template>
   <div class="user-register">
-    <content-page :title="title" :icon="iconName">
-      <div class="button-content" slot="buttons">
-        <div class="button-area">
-          <button class="add-user" @click="addUser()">Cadastrar</button>
-          <button class="edit-user">Editar</button>
-          <button class="erase-user">Excluir</button>
+      <content-page :title="title" :icon="iconName">
+        <div class="button-content" slot="buttons">
+          <div class="button-area">
+            <button class="add-user" @click="addUser()">Cadastrar</button>
+            <button class="edit-user">Editar</button>
+            <button class="erase-user">Excluir</button>
+          </div>
         </div>
-      </div>
-      <div class="user-content" slot="content" v-if="mode === 'save'" :class="{ 'slide-down': showContent}">
-        <div class="user-box">
-          <div class="input-area">
-            <div class="first-line">
-              <div class="user-name">
-                <span>Nome do Usuário</span>
-                <input type="text" v-model="user.name">
+        <div class="user-content" slot="content" v-if="mode === 'save' || mode==='edit'" :class="{ 'slide-down': showContent}">
+          <div class="user-box">
+            <div class="input-area">
+              <div class="first-line">
+                <div class="user-name">
+                  <span>Name</span>
+                  <input type="text" v-model="user.name">
+                </div>
+                <div class="user-email">
+                  <span>E-mail</span>
+                  <input type="text" v-model="user.email">
+                </div> 
+                <div class="user-cpfcnpj">
+                  <span>CNPJ/CPF</span>
+                  <input type="text" v-model="user.cnpjcpf" @input="formatCnpjcpf">
+                </div>
               </div>
-              <div class="user-email">
-                <span>E-mail do Usuário</span>
-                <input type="text" v-model="user.email">
-              </div> 
-              <div class="user-cpfcnpj">
-                <span>CNPJ/CPF</span>
-                <input type="text" v-model="user.cnpjcpf" @input="formatCnpjcpf">
+              <div class="second-line">
               </div>
-            </div>
-            <div class="second-line">
-            </div>
-            <div class="third-line">
-              <div class="user-password">
-                <span>Senha do Usuário</span>
-                <input type="text" v-model="user.password">
+              <div class="third-line">
+                <div class="user-password">
+                  <span>Senha</span>
+                  <input type="text" v-model="user.password">
+                </div>
+                <div class="user-confirmPassword">
+                  <span>Confirme a Senha</span>
+                  <input type="text" v-model="user.confirmPassword">
+                </div>
+                <div class="user-situation">
+                  <span>Situação</span>
+                  <select class="custom-select" v-model="user.situation">
+                    <option value="A">Ativo</option>
+                    <option value="I">Inativo</option>
+                  </select>
+                </div>
               </div>
-              <div class="user-confirmPassword">
-                <span>Confirme a Senha</span>
-                <input type="text" v-model="user.confirmPassword">
-              </div>
-              <div class="user-situation">
-                <span>Situação</span>
-                <select class="custom-select" v-model="user.situation">
-                  <option value="A">Ativo</option>
-                  <option value="I">Inativo</option>
-                </select>
-              </div>
-            </div>
-            <div class="fourth-line">
-              <div class="finish-session">
-                <button class="save-button">Salvar</button>
-                <button class="erase-button">Excluir</button>
-                <button class="cancel-button" @click="cancelAddUser">Cancelar</button>
+              <div class="fourth-line">
+                <div class="finish-session">
+                  <button class="save-button" @click="saveUser">Salvar</button>
+                  <button class="erase-button">Excluir</button>
+                  <button class="cancel-button" @click="cancelAddUser">Cancelar</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="user-table" slot="table">
-        <table-page :headers="tableHeaders" :rows="tableRows" :columns="tableColumns" @selectUser="selectUser()"></table-page>
-      </div>
-    </content-page>
+        <div class="options-table" slot="table">
+          <table>
+            <thead class="table-header">
+              <tr>
+                <th v-for="header in headers" :key="header.id">{{ header.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(user,id) in users" :key="id" @click="selectUser(id)">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.cnpjcpf }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </content-page>
   </div>
-</template>
+</template> 
 
 <script>
 import { goToLink } from '@/utils/utils'
 import contentPage from '@/components/contentPage.vue'
-import tablePage from '@/components/tablePage.vue'
+import "@/style/table.css"
 
 export default {
     name: 'userRegister',
-    components: { contentPage, tablePage },
+    components: { contentPage },
     data(){
       return {
         title: 'Cadastro de Usuários',
         iconName: 'fas fa-user-gear',
-        tableHeaders: [ 'Código','Nome','E-mail','Situação'],
-        tableRows: [
-        ],
-        tableColumns: [ 'id','nome','email','situacao'],
         mode: '',
+        id: '',
         showContent: false,
+        headers:[
+          { id: 1, label: 'Código'},
+          { id: 2, label: 'Name'},
+          { id: 3, label: 'E-mail'},
+          { id: 4, label: 'CNPJ/CPF'},
+        ],
         users: {},
         user: {
           id: '',
-          nome: '',
+          name: '',
           email: '',
           password: '',
           confirmPassword: '',
@@ -91,21 +108,57 @@ export default {
           selected: false
         },
         selectedUser: null, 
+        userCnpjcpf: ''
       }
     },
     methods: {
-        fetchUsers(){
-          this.$http.get('/asusu.json')
-            .then(response =>{
-              const users = Object.values(response.data || {})
-              this.tableRows = users
-              console.log(users)
+        loadUsers(id){
+          this.id=id
+          this.$http('asusu.json').then(res => {
+            const obj = Object.keys(res.data).map(key => {
+              return{ id:key, ...res.data[key]}
             })
-            .catch(error => {
-              console.log(error)
+            this.users=obj.map(obj=>{
+              return { ...obj, selected: false }
             })
+          })
         },
+        selectUser(id,mode="edit"){
+          this.users.map(obj => {
+            obj.selected=false
+          })
+          this.user={...this.users[id]}
+          this.id=id
+          this.users[id].selected=!this.users[id].selected
+          this.mode=mode
+        },
+        saveUser(){
+          if(this.user.id){
+            const userId=this.user.id
+            const updatedUser={ ...this.user }
+            delete updatedUser.id
 
+            this.$http.put(`asusu/${userId}.json`, updatedUser)
+              .then(res=> {
+                console.log('Usuario atualizado com sucesso', res)
+                this.loadUsers()
+                this.mode=''
+              })
+              .catch(error => {
+                console.error('Erro ao atualizar usuario', error)
+              })
+          } else {
+            this.$http.post('asusu.json', this.product)
+              .then(res => {
+                console.log('Usuario cadastrado com sucesso', res)
+                this.loadUsers()
+                this.mode=''
+              })
+              .catch(error => {
+                console.error('Erro ao cadastrar Usuario', error)
+              })
+          }
+        },
         navigateTo(link){
             goToLink(link, this)
         },
@@ -129,7 +182,7 @@ export default {
         }
     },
     mounted(){
-      this.fetchUsers()
+      this.loadUsers()
     }
 }
 </script>

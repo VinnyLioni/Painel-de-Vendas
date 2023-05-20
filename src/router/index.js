@@ -9,6 +9,8 @@ import financesPage from '../content/financesPage.vue'
 import reportsPage from '../content/reportsPage'
 import userRegister from '../content/userRegister'
 import productsRegister from '@/content/productsRegister'
+import shopRegister from '@/content/shopRegister'
+import sellChannel from '@/content/sellChannel'
 
 Vue.use(VueRouter)
 
@@ -54,9 +56,20 @@ const routes = [
   },
   { 
     path: '/products_register',
-    name: 'procuts register',
+    name: 'products register',
     component: productsRegister
-  }
+  },
+  { 
+    path: '/shop_register',
+    name: 'shop register',
+    component: shopRegister
+  },
+  { 
+    path: '/sell_channel',
+    name: 'sell channel',
+    component: sellChannel
+  },
+
 ]
 
 const router = new VueRouter({
