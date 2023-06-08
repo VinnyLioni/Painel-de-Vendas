@@ -15,20 +15,23 @@
               <div class="select-channel">
                 <span>Canal de Venda</span>
                 <div class="input-channel">
-                  <input type="text">
+                  <input type="text" v-model="paped.canal">
                   <button @click="openModal('canal')">...</button>
                 </div>
               </div>
-              <div class="seect-item">
+              <div class="select-item">
                 <span>Item</span>
                 <div class="input-item">
-                  <input type="text">
+                  <input type="text" v-model="paped.itens.des">
                   <button @click="openModal('item')">...</button>
                 </div>
               </div>
             </div>
-            <modal-page :show="showModal" @close="closeModal" :selected-option="selectedOption">
-
+            <modal-page 
+                        :show="showModal" @close="closeModal" 
+                        :selected-option="selectedOption" 
+                        @channel-selected="handleChannelSelected"
+                        @item-selected="handleItemSelected">
             </modal-page>
           </div>
         </div>
@@ -64,7 +67,18 @@ export default {
       title: 'Pedido de Venda',
       icon: 'fas fa-cart-shopping',
       showModal: false,
-      selectedOption: ''
+      selectedOption: '',
+      papeds: {},
+      paped: {
+        canal: null,
+        itens: {
+          id: null,
+          des: null,
+          qt: null,
+          vlr: null
+        },
+        total: 0
+      }
     }
   },
   methods:{
@@ -76,6 +90,21 @@ export default {
     closeModal(){
       this.showModal=false
     },
+    handleChannelSelected(channel){
+      this.paped.canal=channel.name
+      this.closeModal()
+      console.log(channel)
+    },
+    handleItemSelected(item){
+      this.paped.itens= {
+        id: item.id,
+        des: item.des,
+        qt: item.qt,
+        vlr: item.vlr
+      }
+      this.closeModal()
+      console.log(item)
+    }
   },
   created(){
   }
