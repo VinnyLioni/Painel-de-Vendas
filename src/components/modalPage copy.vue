@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(channel,id) in channels" :key="id" @click="selectChannel(channel)" :class="{ 'selectedLine': channel.selectedChannel}">
+                <tr v-for="(channel,id) in channels" :key="id" @click="selectChannel(channel)">
                     <td>{{ channel.id }}</td>
                     <td>{{ channel.name }}</td>
                     <td>{{ channel.account }}</td>
@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item,id) in items" :key="id" @click="selectItem(item)" :class="{ 'selectedLine': item.selectedItem}">
+                <tr v-for="(item,id) in items" :key="id" @click="selectItem(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.des }}</td>
                     <td>{{ item.gru === 'V' ? 'Videogame ' :
@@ -66,11 +66,8 @@ export default {
                 { id: 1, label: 'Código'},
                 { id: 2, label: 'Descrição'},
                 { id: 3, label: 'Família'},
-                { id: 4, label: 'Quantidade'},
-                { id: 5, label: 'Valor'},
             ],
-            items: {},
-            selectedItemIndex: null
+            items: {}
         }
     },
     props: {
@@ -83,10 +80,6 @@ export default {
             default: ''
         },
         selectedItem: {
-            type: Object,
-            default: null
-        },
-        value: {
             type: Object,
             default: null
         }
@@ -102,7 +95,7 @@ export default {
                 return{id: key, ...res.data[key]}
             })
             this.channels = obj.map(obj => {
-                return {...obj, selected: false, selectedChannel: false }
+                return {...obj, selected: false}
             })
         })
         console.log(this.channels)
@@ -114,22 +107,14 @@ export default {
                     return{id: key, ...res.data[key]}
                 })
                 this.items=obj.map(obj => {
-                    return { ...obj, selected: false, selectedItem: false}
+                    return { ...obj, selected: false}
                 })
             })
         },
         selectChannel(channel){
-            this.channels.forEach(ch => {
-                ch.selectedChannel = false
-            });
-            channel.selectedChannel = true
             this.$emit('channel-selected', channel)
         },
         selectItem(item){
-            this.items.forEach(it => {
-                it.selectedItem = false
-            })
-            item.selectedItem = true
             this.$emit('item-selected', item)
         }
     },

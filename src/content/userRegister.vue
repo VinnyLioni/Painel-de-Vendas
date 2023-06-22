@@ -10,7 +10,7 @@
         </div>
         <div class="user-content" slot="content" v-if="mode === 'save' || mode==='edit'" :class="{ 'slide-down': showContent}">
           <div class="user-box">
-            <div class="input-area">
+            <div class="input-area-user">
               <div class="first-line">
                 <div class="user-name">
                   <span>Name</span>
@@ -250,7 +250,7 @@ export default {
     order: -1
   }
 
-  .input-area {
+  .input-area-user {
     display: flex;
     padding: 10px;
     flex-wrap: wrap;
@@ -258,7 +258,7 @@ export default {
     justify-content: space-evenly;
   }
 
-  .input-area input  {
+  .input-area-user input  {
     border-radius: 10px;
     padding: 10px;
     border: none;

@@ -10,7 +10,7 @@
             </div>
             <div class="channel-content" slot="content" v-if="mode==='save' || mode==='edit'">
                 <div class="channel-box">
-                    <div class="input-area">
+                    <div class="input-area-sell">
                         <div class="first-line">
                             <div class="channel-name">
                                 <span>Canal de Venda</span>
@@ -209,7 +209,7 @@ export default {
         padding: 20px;
     }
 
-    .input-area {
+    .input-area-sell {
         display: flex;
         padding: 10px;
         flex-wrap: wrap;

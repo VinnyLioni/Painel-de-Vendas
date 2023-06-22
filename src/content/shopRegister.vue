@@ -10,20 +10,20 @@
       </div>
       <div class="paped-content" slot="content">
         <div class="paped-box">
-          <div class="input-area">
+          <div class="input-area-shop">
             <div class="first-line">
               <div class="select-channel">
                 <span>Canal de Venda</span>
                 <div class="input-channel">
                   <input type="text" v-model="paped.canal">
-                  <button @click="openModal('canal')">...</button>
+                  <button class="open-modal" @click="openModal('canal')">...</button>
                 </div>
               </div>
               <div class="select-item">
                 <span>Item</span>
                 <div class="input-item">
                   <input type="text" v-model="paped.itens.des">
-                  <button @click="openModal('item')">...</button>
+                  <button class="open-modal" @click="openModal('item')">...</button>
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@ export default {
     },
     handleChannelSelected(channel){
       this.paped.canal=channel.name
-      this.closeModal()
+      // this.closeModal()
       console.log(channel)
     },
     handleItemSelected(item){
@@ -102,7 +102,7 @@ export default {
         qt: item.qt,
         vlr: item.vlr
       }
-      this.closeModal()
+      // this.closeModal()
       console.log(item)
     }
   },
@@ -171,7 +171,7 @@ export default {
     padding: 20px;
   }
 
-  .input-area {
+  .input-area-shop {
     display: flex;
     padding: 10px;
     flex-wrap: wrap;
@@ -179,8 +179,9 @@ export default {
     justify-content: space-evenly;  
   }
 
-  .input-area input {
-    border-radius: 10px;
+  .input-area-shop input {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     padding: 10px;
     border: none;
     outline: none;
@@ -188,6 +189,22 @@ export default {
     background-color: #cedeff;
   }
 
+  .open-modal {
+    background-color: #cedeff;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-weight: bolder;
+    transition: .2s;
+  }
 
+  .open-modal:hover {
+    transition: .2s;
+    background-color: #31446e;
+    color: #fff;
+  }
 
 </style>

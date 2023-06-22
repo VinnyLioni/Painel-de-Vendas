@@ -52,7 +52,6 @@
     border-bottom-right-radius: 10px;
   }
 
-  tr.selected {
-    background-color: #d3d3d3;
+  .selectedLine td {
+    background-color: #d3e8ff !important;
   }
-

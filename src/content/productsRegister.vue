@@ -10,7 +10,7 @@
         </div>
         <div class="product-content" slot="content" v-if="mode==='save' || mode==='edit'">
             <div class="product-box">
-                <div class="input-area">
+                <div class="input-area-product">
                     <div class="first-line">
                         <div class="product-name">
                             <span>Nome do Item</span>
@@ -288,7 +288,7 @@ export default {
         padding: 20px
     }
 
-    .input-area {
+    .input-area-product {
         display: flex;
         padding: 10px;
         flex-wrap: wrap;
@@ -296,7 +296,7 @@ export default {
         justify-content: space-evenly;
     }
 
-    .input-area input {
+    .input-area-product input {
         border-radius: 10px;
         padding: 10px;
         border: none;
