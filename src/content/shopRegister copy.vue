@@ -3,7 +3,7 @@
     <content-page :title="title" :icon="icon">
       <div class="button-content" slot="buttons">
         <div class="button-area">
-          <button class="add-paped" @click="openModalPedite">Novo Pedido</button>
+          <button class="add-paped">Novo Pedido</button>
           <button class="edit-paped">Editar Pedido</button>
           <button class="erase-paped">Excluir Pedido</button>
         </div>
@@ -27,15 +27,12 @@
                 </div>
               </div>
             </div>
-            <modal-page-ped 
+            <modal-page 
                         :show="showModal" @close="closeModal" 
                         :selected-option="selectedOption" 
                         @channel-selected="handleChannelSelected"
                         @item-selected="handleItemSelected">
-            </modal-page-ped>
-            <modal-page-pedite
-                        :pedShow="showModalPed">
-            </modal-page-pedite>
+            </modal-page>
           </div>
         </div>
       </div>
@@ -59,19 +56,17 @@
 
 <script>
 import contentPage from '@/components/contentPage.vue'
-import modalPagePed from '@/components/modalPagePed.vue'
-import modalPagePedite from '@/components/modalPagePedite.vue'
+import modalPage from '@/components/modalPage.vue'
 import '@/style/table.css'
 
 export default {
   name: 'shopRegister',
-  components: { contentPage, modalPagePed, modalPagePedite },
+  components: { contentPage, modalPage },
   data(){
     return {
       title: 'Pedido de Venda',
       icon: 'fas fa-cart-shopping',
       showModal: false,
-      showModalPed: false,
       selectedOption: '',
       papeds: {},
       paped: {
@@ -94,10 +89,6 @@ export default {
     },
     closeModal(){
       this.showModal=false
-    },
-    openModalPedite(){
-      this.showModalPed=true
-      console.log(this.showModalPed)
     },
     handleChannelSelected(channel){
       this.paped.canal=channel.name

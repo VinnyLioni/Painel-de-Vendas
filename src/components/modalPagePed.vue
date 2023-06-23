@@ -39,8 +39,8 @@
                            item.gru === 'E' ? 'Esculturas' :
                            item.gru === 'U' ? 'Utilidades' :
                            item.gru }}</td>
-                    <td><input type="number" name="qt" id=""></td>
-                    <td><input type="number" name="vlr" id=""></td>
+                    <td><input name="qt" id="quantity-input"></td>
+                    <td><input name="vlr" id="value-input"></td>
                 </tr>
             </tbody>
         </table>
