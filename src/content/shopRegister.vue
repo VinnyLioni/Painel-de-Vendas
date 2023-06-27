@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="paped-content" slot="content">
-        <div class="paped-box">
+        <!-- <div class="paped-box">
           <div class="input-area-shop">
             <div class="first-line">
               <div class="select-channel">
@@ -26,24 +26,22 @@
                   <button class="open-modal" @click="openModal('item')">...</button>
                 </div>
               </div>
-            </div>
-            <modal-page-ped 
-                        :show="showModal" @close="closeModal" 
-                        :selected-option="selectedOption" 
-                        @channel-selected="handleChannelSelected"
-                        @item-selected="handleItemSelected">
-            </modal-page-ped>
+            </div> -->
             <modal-page-pedite
-                        :pedShow="showModalPed">
+                        v-if="pedShow"
+                        :channel="paped.canal"
+                        @closePed="closeModalPed"
+                        @addItem="openModal('item')"
+                        @chooseChannel="openModal('canal')">
             </modal-page-pedite>
-          </div>
-        </div>
+          <!-- </div>
+        </div> -->
       </div>
       <div class="options-table" slot="table">
         <table>
           <thead class="table-header">
             <tr>
-              <th></th>
+              <th v-for="header in pedHeaders" :key="header.id">{{ header.label }}</th>
             </tr>
           </thead>
           <tbody>
@@ -59,13 +57,12 @@
 
 <script>
 import contentPage from '@/components/contentPage.vue'
-import modalPagePed from '@/components/modalPagePed.vue'
 import modalPagePedite from '@/components/modalPagePedite.vue'
 import '@/style/table.css'
 
 export default {
   name: 'shopRegister',
-  components: { contentPage, modalPagePed, modalPagePedite },
+  components: { contentPage, modalPagePedite },
   data(){
     return {
       title: 'Pedido de Venda',
@@ -73,6 +70,7 @@ export default {
       showModal: false,
       showModalPed: false,
       selectedOption: '',
+      pedShow: false,
       papeds: {},
       paped: {
         canal: null,
@@ -83,37 +81,25 @@ export default {
           vlr: null
         },
         total: 0
-      }
+      },
+      pedHeaders: [
+        { id: 1, label: 'Código'},
+        { id: 2, label: 'Canal de Venda'},
+        { id: 3, label: 'Valor'}
+      ]
     }
   },
   methods:{
-    openModal(option){
-        this.showModal=true
-        this.selectedOption=option
-        console.log(option)
-    },
-    closeModal(){
-      this.showModal=false
+    closeModalPed(){
+      this.pedShow=false
+      this.showModalPed=false
     },
     openModalPedite(){
+      this.pedShow=true
       this.showModalPed=true
       console.log(this.showModalPed)
     },
-    handleChannelSelected(channel){
-      this.paped.canal=channel.name
-      // this.closeModal()
-      console.log(channel)
-    },
-    handleItemSelected(item){
-      this.paped.itens= {
-        id: item.id,
-        des: item.des,
-        qt: item.qt,
-        vlr: item.vlr
-      }
-      // this.closeModal()
-      console.log(item)
-    }
+
   },
   created(){
   }
@@ -178,24 +164,6 @@ export default {
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
     order: -1;
     padding: 20px;
-  }
-
-  .input-area-shop {
-    display: flex;
-    padding: 10px;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: space-evenly;  
-  }
-
-  .input-area-shop input {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    padding: 10px;
-    border: none;
-    outline: none;
-    margin-top: 10px;
-    background-color: #cedeff;
   }
 
   .open-modal {

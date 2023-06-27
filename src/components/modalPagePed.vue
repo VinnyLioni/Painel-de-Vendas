@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-page" v-if="show">
+  <div class="modal-page">
     <div class="modal-content">
         <div class="modal-header">
             <div class="modal-title" v-if="selectedOption === 'canal'">
@@ -10,6 +10,8 @@
             </div>
             <div class="modal-title"></div>
         </div>
+        <!-- <item-modal @cancelModal="closePedModal" :showQtVlr="showQtVlr"></item-modal> -->
+        <!-- <channel-modal @cancelChannelModal="closeChannelModal" @confirmChannel="confirmChannel" :showChannel="showChannel"></channel-modal> -->
         <div class="modal-table">
         <table v-if="selectedOption === 'canal'">
             <thead class="table-header">
@@ -18,7 +20,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(channel,id) in channels" :key="id" @click="selectChannel(channel)" :class="{ 'selectedLine': channel.selectedChannel}">
+                <tr v-for="(channel,id) in channels" :key="id" @click="selectChannel(channel)" 
+                :class="{ 'selectedLine': channel.selectedChannel}">
                     <td>{{ channel.id }}</td>
                     <td>{{ channel.name }}</td>
                     <td>{{ channel.account }}</td>
@@ -38,9 +41,8 @@
                     <td>{{ item.gru === 'V' ? 'Videogame ' :
                            item.gru === 'E' ? 'Esculturas' :
                            item.gru === 'U' ? 'Utilidades' :
-                           item.gru }}</td>
-                    <td><input name="qt" id="quantity-input"></td>
-                    <td><input name="vlr" id="value-input"></td>
+                           item.gru }}
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -52,8 +54,11 @@
 
 <script>
 import '@/style/table.css'
+// import itemModal from '@/components/itemModal.vue'
+// import channelModal from '@/components/channelModal.vue'
 
 export default {
+    // components: { itemModal, channelModal },
     data(){
         return {
             channelHeaders: [
@@ -66,18 +71,16 @@ export default {
                 { id: 1, label: 'Código'},
                 { id: 2, label: 'Descrição'},
                 { id: 3, label: 'Família'},
-                { id: 4, label: 'Quantidade'},
-                { id: 5, label: 'Valor'},
+                // { id: 4, label: 'Quantidade'},
+                // { id: 5, label: 'Valor'},
             ],
             items: {},
-            selectedItemIndex: null
-        }
+            selectedItemIndex: null,
+            showQtVlr: false,
+            showChannel: false
+        } 
     },
     props: {
-        show: {
-            type: Boolean,
-            default: false
-        },
         selectedOption: {
             type: String,
             default: ''
@@ -93,7 +96,19 @@ export default {
     },
     methods: {
         closeModal(){
+            this.showQtVlr=false
             this.$emit('close')
+        },
+        closePedModal(){
+            this.showQtVlr=false
+        },
+        closeChannelModal(){
+            this.showChannel=false
+            this.selectedChannel=false
+            this.$emit('cancel-channel-modal')
+        },
+        confirmChannel(){
+            this.showChannel=false
         },
         loadChannels(id){
         this.id=id
@@ -123,6 +138,7 @@ export default {
                 ch.selectedChannel = false
             });
             channel.selectedChannel = true
+            this.showChannel=true
             this.$emit('channel-selected', channel)
         },
         selectItem(item){
@@ -130,6 +146,7 @@ export default {
                 it.selectedItem = false
             })
             item.selectedItem = true
+            this.showQtVlr = true
             this.$emit('item-selected', item)
         }
     },
@@ -151,6 +168,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 5;
     }
     
     .modal-header {
