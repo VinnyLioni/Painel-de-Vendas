@@ -147,6 +147,7 @@ export default {
             })
             item.selectedItem = true
             this.showQtVlr = true
+            // console.log(this.items)
             this.$emit('item-selected', item)
         }
     },

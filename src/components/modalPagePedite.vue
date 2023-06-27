@@ -13,7 +13,11 @@
         </div>
         <hr>
         <div class="paped-content-pedite">
-            <div class="paped-box">
+            <div class="paped-box-pedite">
+            <div class="total-ped">
+                <span>Total: </span>
+                <input class="input-total" :value="formatCurrencyTotal(calculateTotal())" disabled>
+            </div>
                 <div class="input-area-shop-ite">
                     <div class="first-line">
                         <div class="select-channel-ite">
@@ -44,8 +48,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
+                    <tr v-for="(item, index) in localPaped.itens" :key="index">
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.des }}</td>
+                        <td>{{ item.qt }}</td>
+                        <td>{{ formatCurrency(item.vlr) }}</td>
+                        <td>
+                            <button class="remove-item-button" @click="removeItem">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -59,14 +71,21 @@
             @item-selected="handleItemSelected"
             @cancel-channel-modal="cancelChannelSelection">
     </modal-page-ped>
+    <quantity-modal
+            v-if="showQuantityModal"
+            @cancel="handleQuantityModalCancel"
+            @confirm="handleQuantityModalConfirm"
+            v-model="showQuantityModal">
+    </quantity-modal>
   </div>
 </template>
 
 <script>
 import ModalPagePed from '@/components/modalPagePed.vue'
+import quantityModal from '@/components/itemModal.vue'
 
 export default {
-    components: { ModalPagePed },
+    components: { ModalPagePed, quantityModal },
     name: 'modalPagePedite',
     props: {
         // pedShow: {
@@ -90,7 +109,6 @@ export default {
                 default: ''
             }
         },
-
     },
     data(){
         return {
@@ -101,7 +119,11 @@ export default {
                 { id: 4, label: 'Valor'},
                 { id: 5, label: 'Opções'}
             ],
-            localPaped: { ...this.paped },
+            localPaped: { 
+                canal: null,
+                itens: [],
+                total: 0
+             },
             localSelectedChannel: { ...this.selectedChannel },
             form: {
                 name: ''
@@ -118,6 +140,8 @@ export default {
                 },
                 total: 0
             },
+            showQuantityModal: false,
+            selectedItem: null,
         }
     },
     methods: {
@@ -149,18 +173,58 @@ export default {
                 window.dispatchEvent(evento);
         },
         handleItemSelected(item){
-        this.paped.itens= {
-            id: item.id,
-            des: item.des,
-            qt: item.qt,
-            vlr: item.vlr
-      }
-      // this.closeModal()
-      console.log(item)
-    },
-    cancelChannelSelection(){
-      this.paped.canal=null
-    },
+            // this.paped.itens= {
+            //     id: item.id,
+            //     des: item.des,
+            //     qt: item.qt,
+            //     vlr: item.vlr
+            // }
+
+            this.selectedItem=item
+            this.showQuantityModal=true
+
+            // this.localPaped.itens.push(item);
+            // const evento = new CustomEvent('setItem', { detail: item})
+            // window.dispatchEvent(evento)
+            // this.closeModal()
+        },
+        handleQuantityModalCancel(){
+            this.showQuantityModal=false
+        },
+        handleQuantityModalConfirm(item){
+            this.selectedItem.qt = item.quantity
+            this.selectedItem.vlr = item.value
+            this.localPaped.itens.push(this.selectedItem)
+            this.showQuantityModal=false
+
+            const evento = new CustomEvent('setItem', { detail: this.selectedItem})
+            window.dispatchEvent(evento)
+        },
+        cancelChannelSelection(){
+        this.paped.canal=null
+        },
+        removeItem(index){
+            this.localPaped.itens.splice(index, 1)
+        },
+        formatCurrency(value){
+            const formattedValue = value.toFixed(2); // Limita o número de casas decimais a 2
+            return `R$ ${formattedValue.replace('.', ',')}`; // Substitui o ponto decimal por vírgula
+        },
+        formatCurrencyTotal(value){
+            if (typeof value !== 'number') {
+                return value
+            }
+
+            return 'R$' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2})
+        },
+        calculateTotal(){
+            let total = 0
+            for (const item of this.localPaped.itens) {
+                total += item.vlr
+            }
+
+            return total
+        }
     },
     mounted(){
         console.log(this.form)
@@ -169,11 +233,44 @@ export default {
         // this.form.name = event.detail.name
         console.log('Evento personalizado disparado!', event.detail);
         });
+        // window.addEventListener('setItem', function(event) {
+        //     console.log('evento personalizado disparado!', event.detail)
+        // })
     }
 }
 </script>
 
 <style>
+
+    .total-ped {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        gap: 10px;
+    }
+
+    .input-total {
+        background-color: #cedeff;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 1.2rem;
+    }
+
+    .paped-box-pedite {
+        display: flex;
+        justify-content: center;
+        background-color: #fff;
+        border-radius: 10px;
+        margin: 20px;
+        width: 80vh;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        order: -1;
+        padding: 20px;
+        flex-direction: column;
+    }
 
     .input-area-shop-ite {
         display: flex;
@@ -268,5 +365,21 @@ export default {
         gap: 10px;
         display: flex;
         flex-direction: column;
+    }
+
+    .remove-item-button {
+        background-color: #fff;
+        outline: none;
+        border: none;
+        color: #31446e;
+        padding: 5px;
+        border-radius: 5px;
+        transition: .2s;
+        cursor: pointer;
+    }
+
+    .remove-item-button:hover {
+        background-color:#31446e ;
+        color: #fff;
     }
 </style>

@@ -1,22 +1,19 @@
 <template>
-  <div class="modal-page-qtvlr" v-if="showQtVlr">
-    <div class="modal-content-qtvlr">
-      <div class="modal-header-qtvlr">
-        <span>Definir Quantidades e Valores</span>
+  <div class="modal-wrapper-quantity">
+    <div class="modal-content-quantity">
+      <span>Preencha os Campos</span>
+      <hr>
+      <div class="form-group-quantity">
+        <label for="quantity">Quantidade:</label>
+        <input type="number" v-model="quantity" id="quantity" min="0" step="0.01" required>
       </div>
-      <div class="modal-session-qtvlr">
-        <div class="session-quantity">
-        <label for="">Quantidade</label>
-        <input type="number">
-        </div>
-        <div class="session-vlr">
-        <label for="">Valor</label>
-        <input type="number">
-        </div>
+      <div class="form-group-quantity">
+        <label for="value">Valor:</label>
+        <input type="number" v-model="value" id="value" min="0" step="0.01" required>
       </div>
-      <div class="button-qtvlr-area">
-        <button class="save-item">Salvar</button>
-        <button class="cancel-item" @click="cancelModal">Cancelar</button>
+      <div class="button-group">
+        <button class="finish-button" @click="confirm">Confirmar</button>
+        <button class="cancel-button-modal" @click="cancel">Cancelar</button>
       </div>
     </div>
   </div>
@@ -25,94 +22,97 @@
 <script>
 export default {
   data(){
-    return{
-
+    return {
+      quantity: 0,
+      value: 0
     }
-  },
-  props: {
-    showQtVlr: {
-      type: Boolean,
-      default: false
-    },
   },
   methods: {
-    cancelModal(){
-      this.$emit('cancelModal')
+    cancel(){
+      this.$emit('cancel')
+    },
+    confirm(){
+      if (this.quantity !== null && this.value !== null) {
+        const item = {
+          quantity: parseFloat(this.quantity),
+          value: parseFloat(this.value)
+        }
+      this.$emit('confirm', item)
+      }
     }
   }
-
-
 }
 </script>
 
 <style>
-  .modal-page-qtvlr {
+  .modal-wrapper-quantity {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 0; 
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: rgba(0, 0, 0, 0.2); */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
-  }
+    z-index: 99
+    }
 
-  .modal-content-qtvlr {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    font-size: 1rem;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-  }
+    .modal-content-quantity {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+    }
 
-  .modal-session-qtvlr {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding: 50px;
-  }
+    .form-group-quantity {
+      margin-bottom: 10px;
+    }
 
-  .modal-session-qtvlr input {
-    border-radius: 10px;
-    padding: 10px;
-    border: none;
-    outline: none;
-    margin-top: 10px;
-    background-color: #cedeff;
-  }
+    .form-group-quantity label {
+      display: block;
+      margin-bottom: 5px;
+    }
 
-  .session-quantity, .session-vlr {
-    display: flex;
-    flex-direction: column;
-  }
+    .form-group-quantity input {
+      background-color: #cedeff;
+      border-radius: 5px;
+      padding: 5px;
+      border: none;
+      outline: none;
+      width: 100%;
+    }
 
-  .button-qtvlr-area {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 10px;
-  }
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-  .save-item, .cancel-item {
-    background-color: #fff;
-    outline: none;
-    border: none;
-    font-size: 1.2rem;
-    padding: 8px;
-    cursor: pointer;
-    transition: .2s;
-    border-radius: 10px;
-  }
+    .cancel-button-modal,
+    .finish-button {
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: .2s;
+      background-color: #fff;
+      color: #31446e;
+    }
 
-  .save-item:hover {
-    background-color: #31446e;
-    color: #fff;
-  }
+    .cancel-button:hover-modal {
+      background-color: #bb3737;
+      color: #fff;
+    }
 
-  .cancel-item:hover {
-    background-color: #31446e;
-    color: #fff;
-  }
+    .finish-button:hover {
+      background-color: #31446e;
+      color: #fff;
+    }
+
 </style>
