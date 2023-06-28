@@ -1,6 +1,6 @@
 <template>
 <div class="products-register">
-    <content-page :title='title' :icon='icon'> TESTE
+    <content-page :title='title' :icon='icon'>
         <div class="button-content" slot="buttons">
             <div class="button-area">
                 <button class="add-product" @click="addProduct" v-if="mode===''">Cadastrar</button>
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="options-table" slot="table">
+        <div class="options-table" slot="table" v-if="mode === ''">
             <table>
                 <thead class="table-header">
                     <tr>
@@ -114,10 +114,12 @@
 <script>
 import contentPage from '@/components/contentPage.vue'
 import "@/style/table.css"
+import { mapState } from 'vuex'
 
 export default {
     name: 'productsRegister',
     components: { contentPage },
+    computed: mapState(['isLoading']),
     data(){
         return {
             title: 'Cadastro de Produtos',
@@ -178,8 +180,10 @@ export default {
             }
         },
         loadProducts(id){
+            this.$store.commit('setLoading', true)
             this.id=id
             this.$http('mpalmo.json').then(res => {
+                this.$store.commit('setLoading', false)
                 const obj = Object.keys(res.data).map(key => {
                     return{id: key, ...res.data[key]}
                 })
@@ -214,7 +218,7 @@ export default {
         cleanPage(){
             this.mode=''
             this.cleanProduct(this.product)
-
+            this.loadProducts()
             this.products.forEach(obj => {
                 obj.selected=false
             })

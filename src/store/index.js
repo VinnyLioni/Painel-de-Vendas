@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: { 
     isMenuVisible: false,
+    isLoading: false
   },
   getters: {
   },
@@ -16,6 +17,10 @@ export default new Vuex.Store({
       } else {
         state.isMenuVisible = isVisible
       }
+    },
+    setLoading(state, payload) {
+      state.isLoading = payload
+      console.log(state.isLoading, "lucas gay")
     }
   },
   actions: {

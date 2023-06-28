@@ -11,14 +11,11 @@ import userRegister from '../content/userRegister'
 import productsRegister from '@/content/productsRegister'
 import shopRegister from '@/content/shopRegister'
 import sellChannel from '@/content/sellChannel'
+import ctrecRegister from '@/content/ctrecRegister'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // { path: '/',
-  //   name: 'login',
-  //   component: loginPage 
-  // },
   {
     path: '/home',
     name: 'home',
@@ -68,6 +65,11 @@ const routes = [
     path: '/sell_channel',
     name: 'sell channel',
     component: sellChannel
+  },
+  { 
+    path: '/ctrec_page',
+    name: 'ctrec page',
+    component: ctrecRegister
   },
 
 ]

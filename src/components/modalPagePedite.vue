@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="options-table">
+        <div class="options-table" v-show="localPaped.itens.length > 0">
             <table>
                 <thead class="table-header">
                     <tr>
@@ -61,6 +61,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="footer-pedite-content">
+            <button class="save-paped" @click="savePaped">Salvar</button>
         </div>
     </div>
     <modal-page-ped 
@@ -83,10 +86,12 @@
 <script>
 import ModalPagePed from '@/components/modalPagePed.vue'
 import quantityModal from '@/components/itemModal.vue'
+import { mapState } from 'vuex'
 
 export default {
     components: { ModalPagePed, quantityModal },
     name: 'modalPagePedite',
+    computed: mapState(['isLoading']),
     props: {
         // pedShow: {
         //     type: Boolean,
@@ -121,27 +126,21 @@ export default {
             ],
             localPaped: { 
                 canal: null,
+                dt: '',
                 itens: [],
                 total: 0
              },
+            pedId: null,
             localSelectedChannel: { ...this.selectedChannel },
             form: {
                 name: ''
             },
             showModal: false,
             selectedOption: '',
-            paped: {
-                canal: null,
-                itens: {
-                    id: null,
-                    des: null,
-                    qt: null,
-                    vlr: null
-                },
-                total: 0
-            },
+            paped: {},
             showQuantityModal: false,
             selectedItem: null,
+            id: null
         }
     },
     methods: {
@@ -166,27 +165,15 @@ export default {
             this.$emit('insertItem')
         },
         handleChannelSelected(channel){
-            this.paped.canal=channel.name
+
             this.form.name=channel.name
             console.log(channel)
                 const evento = new CustomEvent('setChannel', { detail: channel });
                 window.dispatchEvent(evento);
         },
         handleItemSelected(item){
-            // this.paped.itens= {
-            //     id: item.id,
-            //     des: item.des,
-            //     qt: item.qt,
-            //     vlr: item.vlr
-            // }
-
             this.selectedItem=item
             this.showQuantityModal=true
-
-            // this.localPaped.itens.push(item);
-            // const evento = new CustomEvent('setItem', { detail: item})
-            // window.dispatchEvent(evento)
-            // this.closeModal()
         },
         handleQuantityModalCancel(){
             this.showQuantityModal=false
@@ -194,14 +181,16 @@ export default {
         handleQuantityModalConfirm(item){
             this.selectedItem.qt = item.quantity
             this.selectedItem.vlr = item.value
+            this.localPaped.canal=this.form.name
             this.localPaped.itens.push(this.selectedItem)
             this.showQuantityModal=false
+            this.localPaped.total=this.calculateTotal()
 
             const evento = new CustomEvent('setItem', { detail: this.selectedItem})
             window.dispatchEvent(evento)
         },
         cancelChannelSelection(){
-        this.paped.canal=null
+            this.localPaped.canal=null
         },
         removeItem(index){
             this.localPaped.itens.splice(index, 1)
@@ -224,6 +213,49 @@ export default {
             }
 
             return total
+        },
+        savePaped(){
+            this.localPaped.dt = new Date().toLocaleDateString()
+            this.localPaped.st = 'A'
+            if (this.localPaped.id) {
+                const papedId = this.localPaped.id
+                const updatedPaped = { ...this.localPaped }
+                delete updatedPaped.id
+
+                this.$http.put(`paped/${papedId}.json`, updatedPaped)
+                    .then(() => {
+                        console.log('atualizado')
+                    })
+            } else {
+                this.$http.post('paped.json', this.localPaped)
+                    .then(res => {
+                        this.pedId=res.data.name
+                        console.log('salvo!')
+                        this.$emit('savePaped')
+                        const ctrecData = {
+                            data: this.localPaped.dt,
+                            valor: this.localPaped.total,
+                            pedidoId: this.pedId,
+                            situacao: this.localPaped.st
+                        }
+                        this.$http.post('ctrec.json', ctrecData)
+                    })
+            }
+
+
+            console.log(this.localPaped)
+        },
+        loadPaped(id){
+            this.id=id
+            this.$http.get('paped.json').then(res => {
+                const obj = Object.keys(res.data).map(key => {
+                    return{id: key, ...res.data[key]}
+                })
+                this.paped=obj.map(obj => {
+                    return { ...obj, selected: false}
+                })
+            })
+            this.$emit('loadPaped')
         }
     },
     mounted(){
@@ -261,7 +293,7 @@ export default {
 
     .paped-box-pedite {
         display: flex;
-        justify-content: center;
+        justify-content: cente;
         background-color: #fff;
         border-radius: 10px;
         margin: 20px;
@@ -380,6 +412,22 @@ export default {
 
     .remove-item-button:hover {
         background-color:#31446e ;
+        color: #fff;
+    }
+
+    .save-paped {
+        background-color: #cedeff;
+        transition: .2s;
+        outline: none;
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    .save-paped:hover {
+        background-color: #316e50;
         color: #fff;
     }
 </style>

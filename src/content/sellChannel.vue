@@ -53,9 +53,12 @@
 
 <script>
 import contentPage from '@/components/contentPage.vue'
+import { mapState } from 'vuex'
+
 export default {
     name: 'sellChannel',
     components: { contentPage },
+    computed: mapState(['isLoading']),
     data(){
         return {
             title: 'Cadastro de Canal de Venda',
@@ -109,8 +112,10 @@ export default {
             }
         },
         loadChannels(id){
+            this.$store.commit('setLoading', true)
             this.id=id
             this.$http('channel.json').then(res => {
+                this.$store.commit('setLoading', false)
                 const obj = Object.keys(res.data).map(key => {
                     return{id: key, ...res.data[key]}
                 })

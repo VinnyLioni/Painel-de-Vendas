@@ -30,9 +30,11 @@
             <modal-page-pedite
                         v-if="pedShow"
                         :channel="paped.canal"
+                        :pedido="papedite"
                         @closePed="closeModalPed"
                         @addItem="openModal('item')"
-                        @chooseChannel="openModal('canal')">
+                        @chooseChannel="openModal('canal')"
+                        @savePaped="savePaped">
             </modal-page-pedite>
           <!-- </div>
         </div> -->
@@ -45,8 +47,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <table></table>
+            <tr v-for="(paped,id) in paped" :key="id" @click="selectPaped(id)">
+              <td>{{ paped.id }}</td>
+              <td>{{ paped.dt }}</td>
+              <td>{{ paped.canal }}</td>
+              <td>{{ formatCurrency(paped.total)}}</td>
+              <td>{{ paped.st === 'A' ? 'Aberto' :
+                     paped.st === 'C' ? 'Cancelado' :
+                     paped.st === 'F' ? 'Faturado' :
+                     paped.st }}</td>
             </tr>
           </tbody>
         </table>
@@ -59,10 +68,12 @@
 import contentPage from '@/components/contentPage.vue'
 import modalPagePedite from '@/components/modalPagePedite.vue'
 import '@/style/table.css'
+import { mapState } from 'vuex'
 
 export default {
   name: 'shopRegister',
   components: { contentPage, modalPagePedite },
+  computed: mapState(['isLoading']),
   data(){
     return {
       title: 'Pedido de Venda',
@@ -71,21 +82,15 @@ export default {
       showModalPed: false,
       selectedOption: '',
       pedShow: false,
-      papeds: {},
+      papedite: {},
       paped: {
-        canal: null,
-        itens: {
-          id: null,
-          des: null,
-          qt: null,
-          vlr: null
-        },
-        total: 0
       },
       pedHeaders: [
         { id: 1, label: 'Código'},
-        { id: 2, label: 'Canal de Venda'},
-        { id: 3, label: 'Valor'}
+        { id: 2, label: 'Data'},
+        { id: 3, label: 'Canal de Venda'},
+        { id: 4, label: 'Valor'},
+        { id: 5, label: 'Situação'},
       ]
     }
   },
@@ -97,11 +102,44 @@ export default {
     openModalPedite(){
       this.pedShow=true
       this.showModalPed=true
-      console.log(this.showModalPed)
+      console.log(this.localPaped)
+    },
+    savePaped(){
+      this.pedShow=false
+      this.loadPaped()
+    },
+    loadPaped(id){
+        this.$store.commit('setLoading', true)
+        console.log('setLoading')
+        this.id=id
+        this.$http.get('paped.json').then(res => {
+            this.$store.commit('setLoading', false)
+            const obj = Object.keys(res.data).map(key => {
+                return{id: key, ...res.data[key]}
+            })
+            this.paped=obj.map(obj => {
+                return { ...obj, selected: false}
+            })
+        })
+        this.$emit('loadPaped')
+    },
+    selectPaped(id){
+      this.pedShow=true
+      this.papedite=this.paped[id]
+      console.log(this.paped[id])
+    },
+    formatCurrency(value){
+        const formattedValue = value.toFixed(2);
+        return `R$ ${formattedValue.replace('.', ',')}`;
     },
 
   },
   created(){
+    },
+  mounted(){
+    this.localPaped = { ...this.pedido }
+    console.log(this.localPaped)
+    this.loadPaped()
   }
 }
 </script>

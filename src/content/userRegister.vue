@@ -79,10 +79,12 @@
 import { goToLink } from '@/utils/utils'
 import contentPage from '@/components/contentPage.vue'
 import "@/style/table.css"
+import { mapState } from 'vuex'
 
 export default {
     name: 'userRegister',
     components: { contentPage },
+    computed: mapState(['isLoading']),
     data(){
       return {
         title: 'Cadastro de Usuários',
@@ -113,8 +115,10 @@ export default {
     },
     methods: {
         loadUsers(id){
+          this.$store.commit('setLoading', true)
           this.id=id
           this.$http('asusu.json').then(res => {
+            this.$store.commit('setLoading', false)
             const obj = Object.keys(res.data).map(key => {
               return{ id:key, ...res.data[key]}
             })
@@ -133,6 +137,7 @@ export default {
           this.mode=mode
         },
         saveUser(){
+          this.$store.commit('setLoading', true)
           if(this.user.id){
             const userId=this.user.id
             const updatedUser={ ...this.user }
@@ -140,6 +145,7 @@ export default {
 
             this.$http.put(`asusu/${userId}.json`, updatedUser)
               .then(res=> {
+                this.$store.commit('setLoading', false)
                 console.log('Usuario atualizado com sucesso', res)
                 this.loadUsers()
                 this.mode=''
@@ -150,6 +156,7 @@ export default {
           } else {
             this.$http.post('asusu.json', this.product)
               .then(res => {
+                this.$store.commit('setLoading', false)
                 console.log('Usuario cadastrado com sucesso', res)
                 this.loadUsers()
                 this.mode=''

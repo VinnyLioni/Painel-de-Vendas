@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+      <loading-page v-if="isLoading" />
       <home-view />
   </div>
 </template>
@@ -7,11 +8,17 @@
 <script>
   import HomeView from '@/views/HomeView.vue'
   // import transitionComp from '@/components/transitionComp.vue'
+  import loadingPage from '@/components/loadingPage.vue'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
-      HomeView,
-    }
+      HomeView, loadingPage
+    },
+    methods: {
+
+    },
+    computed: mapState(['isLoading', false])
   }
 </script>
 

@@ -56,9 +56,11 @@
 import '@/style/table.css'
 // import itemModal from '@/components/itemModal.vue'
 // import channelModal from '@/components/channelModal.vue'
+import { mapState } from 'vuex'
 
 export default {
     // components: { itemModal, channelModal },
+    computed: mapState(['isLoading']),
     data(){
         return {
             channelHeaders: [
@@ -92,6 +94,10 @@ export default {
         value: {
             type: Object,
             default: null
+        },
+        pedidoSelecionado: {
+            type: Object,
+            required: true
         }
     },
     methods: {
@@ -111,20 +117,24 @@ export default {
             this.showChannel=false
         },
         loadChannels(id){
-        this.id=id
-        this.$http('channel.json').then(res => {
-            const obj = Object.keys(res.data).map(key => {
-                return{id: key, ...res.data[key]}
+            this.$store.commit('setLoading', true)
+            this.id=id
+            this.$http('channel.json').then(res => {
+                this.$store.commit('setLoading', false)
+                const obj = Object.keys(res.data).map(key => {
+                    return{id: key, ...res.data[key]}
+                })
+                this.channels = obj.map(obj => {
+                    return {...obj, selected: false, selectedChannel: false }
+                })
             })
-            this.channels = obj.map(obj => {
-                return {...obj, selected: false, selectedChannel: false }
-            })
-        })
-        console.log(this.channels)
+            console.log(this.channels)
         },
         loadItems(id){
+            this.$store.commit('setLoading', true)
             this.id=id
             this.$http('mpalmo.json').then(res => {
+                this.$store.commit('setLoading', false)
                 const obj = Object.keys(res.data).map(key => {
                     return{id: key, ...res.data[key]}
                 })
