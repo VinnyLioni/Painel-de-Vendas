@@ -4,8 +4,8 @@
       <div class="button-content" slot="buttons">
         <div class="button-area">
           <button class="add-paped" @click="openModalPedite">Novo Pedido</button>
-          <button class="edit-paped">Editar Pedido</button>
-          <button class="erase-paped">Excluir Pedido</button>
+          <!-- <button class="edit-paped">Editar Pedido</button>
+          <button class="erase-paped">Excluir Pedido</button> -->
         </div>
       </div>
       <div class="paped-content" slot="content">
@@ -34,7 +34,8 @@
                         @closePed="closeModalPed"
                         @addItem="openModal('item')"
                         @chooseChannel="openModal('canal')"
-                        @savePaped="savePaped">
+                        @savePaped="savePaped"
+                        @updatedPaped="updatedPaped">
             </modal-page-pedite>
           <!-- </div>
         </div> -->
@@ -83,6 +84,12 @@ export default {
       selectedOption: '',
       pedShow: false,
       papedite: {},
+      blankPapedite: {
+        canal: null,
+        dt: '',
+        itens: [],
+        total: 0
+      },
       paped: {
       },
       pedHeaders: [
@@ -100,11 +107,16 @@ export default {
       this.showModalPed=false
     },
     openModalPedite(){
+      this.papedite=this.blankPapedite
       this.pedShow=true
       this.showModalPed=true
       console.log(this.localPaped)
     },
     savePaped(){
+      this.pedShow=false
+      this.loadPaped()
+    },
+    updatedPaped(){
       this.pedShow=false
       this.loadPaped()
     },
@@ -165,7 +177,7 @@ export default {
   .add-paped:hover,
   .edit-paped:hover,
   .erase-paped:hover {
-    transform: scale(1.1) translateY(-5px);
+    transform: scale(1.1) translateY(-2px);
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
     transition: .2s;
   }

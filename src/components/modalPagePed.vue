@@ -97,7 +97,7 @@ export default {
         },
         pedidoSelecionado: {
             type: Object,
-            required: true
+            required: false
         }
     },
     methods: {

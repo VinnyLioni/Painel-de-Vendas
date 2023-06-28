@@ -125,11 +125,17 @@ export default {
                 { id: 5, label: 'Opções'}
             ],
             localPaped: { 
-                canal: null,
+                canal: '',
                 dt: '',
                 itens: [],
                 total: 0
              },
+            blankLocalPaped: { 
+                canal: '',
+                dt: '',
+                itens: [],
+                total: 0
+            },
             pedId: null,
             localSelectedChannel: { ...this.selectedChannel },
             form: {
@@ -153,6 +159,7 @@ export default {
             console.log(option)
         },
         closePedModal(){
+            this.localPaped=this.blankLocalPaped
             this.$emit('closePed')
         },
         chooseChannel(){
@@ -165,7 +172,6 @@ export default {
             this.$emit('insertItem')
         },
         handleChannelSelected(channel){
-
             this.form.name=channel.name
             console.log(channel)
                 const evento = new CustomEvent('setChannel', { detail: channel });
@@ -219,12 +225,14 @@ export default {
             this.localPaped.st = 'A'
             if (this.localPaped.id) {
                 const papedId = this.localPaped.id
+                this.localPaped.canal=this.form.name
                 const updatedPaped = { ...this.localPaped }
                 delete updatedPaped.id
 
                 this.$http.put(`paped/${papedId}.json`, updatedPaped)
                     .then(() => {
-                        console.log('atualizado')
+                        this.$emit('updatedPaped')
+                        console.log(updatedPaped)
                     })
             } else {
                 this.$http.post('paped.json', this.localPaped)
@@ -235,15 +243,15 @@ export default {
                         const ctrecData = {
                             data: this.localPaped.dt,
                             valor: this.localPaped.total,
+                            canal: this.localPaped.canal,
                             pedidoId: this.pedId,
                             situacao: this.localPaped.st
                         }
                         this.$http.post('ctrec.json', ctrecData)
                     })
             }
-
-
-            console.log(this.localPaped)
+            this.loadPaped()
+            console.log(this.updatedPaped)
         },
         loadPaped(id){
             this.id=id
@@ -259,6 +267,8 @@ export default {
         }
     },
     mounted(){
+        this.localPaped = this.pedido
+        console.log(this.localPaped)
         console.log(this.form)
         window.addEventListener('setChannel', function(event) {
         // Manipular o evento aqui
@@ -289,6 +299,8 @@ export default {
         border-radius: 10px;
         padding: 10px;
         font-size: 1.2rem;
+        color: #bb3737;
+        font-weight: bold;
     }
 
     .paped-box-pedite {

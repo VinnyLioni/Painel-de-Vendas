@@ -55,8 +55,8 @@
             <tr v-for="(title, id) in localCtrec" :key="id">
               <td>{{ title.id }}</td>
               <td>{{ title.data }}</td>
-              <td>{{ title.valor }}</td>
-              <td>{{ title.situacao }}</td>
+              <td>{{ formatCurrency(title.valor) }}</td>
+              <td>{{ formatSituation(title.situacao) }}</td>
               <td>{{ title.canal }}</td>
               <td>{{ title.pedidoId }}</td>
             </tr>
@@ -81,7 +81,7 @@ export default {
         return {
             title: 'Títulos a Receber',
             icon: 'fas fa-coins',
-            mode: 'edit',
+            mode: '',
             id: null,
             ctrecHeaders: [
               { id: 1, label: 'Código'},
@@ -107,6 +107,17 @@ export default {
             return { ...obj, selected: false}
           })
         })
+      },
+      formatCurrency(value){
+        const formattedValue = value.toFixed(2);
+        return `R$ ${formattedValue.replace('.', ',')}`;
+      },
+      formatSituation(situation){
+        if (situation === 'A'){
+          return 'Aberto'
+        } else if (situation === 'B'){
+          return 'Baixado'
+        }
       }
     },
     mounted(){

@@ -7,7 +7,7 @@
                 <button class="edit-product">Editar</button>
                 <button class="erase-product">Excluir</button>
             </div>
-        </div>
+        </div> 
         <div class="product-content" slot="content" v-if="mode==='save' || mode==='edit'">
             <div class="product-box">
                 <div class="input-area-product">

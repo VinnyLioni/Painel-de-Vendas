@@ -12,6 +12,7 @@ import productsRegister from '@/content/productsRegister'
 import shopRegister from '@/content/shopRegister'
 import sellChannel from '@/content/sellChannel'
 import ctrecRegister from '@/content/ctrecRegister'
+import ctrecViewer from '@/content/ctrecViewer'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,11 @@ const routes = [
     name: 'ctrec page',
     component: ctrecRegister
   },
+  {
+    path: '/ctrec_viewer',
+    name: 'ctrec viewer',
+    component: ctrecViewer
+  }
 
 ]
 
