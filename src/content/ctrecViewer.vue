@@ -30,6 +30,13 @@
           {{ formatCurrency(this.ctrecTotal) }}
         </div>
       </div>
+      <div class="sta-content">
+        <span>Qtd. Pedidos</span>
+        <hr>
+        <div class="qt-st">
+          {{ ctrecs.length }}
+        </div>
+      </div>
     </div>
     </content-page>
   </div>
@@ -93,7 +100,7 @@ export default {
     border-top: 100px;
     background-color: #fff;
     padding: 30px;
-    width: 300px;
+    width: 250px;
     border-radius: 10px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
     transition: .2s;
@@ -104,7 +111,7 @@ export default {
     cursor: pointer;
   }
 
-  .vlr-sta, .vlr-st, .vlr-stb {
+  .vlr-sta, .vlr-st, .vlr-stb, .qt-st {
     color: #b90000;
     font-weight: bold;
     font-size: 2rem;
